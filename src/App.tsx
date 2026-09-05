@@ -97,14 +97,14 @@ const App = () => {
   return (
     <>
       <Header />
-      <main>
+      <main className="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-8">
 
         <section>
           <NewTaskForm />
         </section>
 
         
-        <div className="board">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Column title="Todo">
             {todoTasks.map((task) => (
               <TaskCard
