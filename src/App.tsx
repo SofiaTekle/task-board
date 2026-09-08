@@ -2,10 +2,11 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TaskCard from "./components/TaskCard";
 import Column from "./components/Column";
-import type { Task } from "./types/Task";
-import NewTaskForm  from "./components/NewTaskForm";
+import type { Task, NewTask } from "./types/Task";
+import NewTaskForm from "./components/NewTaskForm";
+import { useState } from "react";
 
-const tasks: Task[] = [
+const initialTasks: Task[] = [
   {
     id: 1,
     title: "Skapa dashboard",
@@ -89,21 +90,58 @@ const tasks: Task[] = [
   },
 ];
 
-const todoTasks: Task[] = tasks.filter((task) => task.status === "todo");
-const doingTasks: Task[] = tasks.filter((task) => task.status === "doing");
-const doneTasks: Task[] = tasks.filter((task) => task.status === "done");
-
 const App = () => {
+  const [taskId, setTaskId] = useState<number>(initialTasks.length + 1);
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const addTask = (newTask: NewTask) => {
+    const taskToAdd: Task = {
+      id: taskId,
+      status: "todo",
+      ...newTask,
+    };
+    setTaskId(taskId + 1);
+    setTasks([...tasks, taskToAdd]);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      task.title.toLowerCase().includes(term) ||
+      task.description.toLowerCase().includes(term) ||
+      task.category.toLowerCase().includes(term) ||
+      task.assignee.toLowerCase().includes(term) ||
+      task.priority.toLowerCase().includes(term)
+    );
+  });
+
+  const todoTasks: Task[] = filteredTasks.filter(
+    (task) => task.status === "todo",
+  );
+  const doingTasks: Task[] = filteredTasks.filter(
+    (task) => task.status === "doing",
+  );
+  const doneTasks: Task[] = filteredTasks.filter(
+    (task) => task.status === "done",
+  );
+
   return (
     <>
       <Header />
       <main className="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-8">
-
         <section>
-          <NewTaskForm />
+          <NewTaskForm onAddTask={addTask} />
         </section>
 
-        
+        <input
+          type="text"
+          placeholder="Sök task..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-md border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Column title="Todo">
             {todoTasks.map((task) => (

@@ -11,3 +11,11 @@ export type Task = {
     priority: TaskPriority;
     status: TaskStatus;
 }
+
+export type NewTask = {
+    title: string;
+    description: string;
+    assignee: string;
+    category: TaskCategory;
+    priority: TaskPriority;
+}

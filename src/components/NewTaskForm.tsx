@@ -1,7 +1,11 @@
 import { useState } from "react";
-import type { TaskCategory, TaskPriority } from "../types/Task";
+import type { NewTask, TaskCategory, TaskPriority } from "../types/Task";
 
-const NewTaskForm = () => {
+type NewTaskFormProps = {
+  onAddTask: (task: NewTask) => void;
+};
+
+const NewTaskForm = ({ onAddTask }: NewTaskFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [assignee, setAssignee] = useState("");
@@ -10,13 +14,22 @@ const NewTaskForm = () => {
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("New Task:", {
+
+    if (!category || !priority) return;
+
+    onAddTask({
       title,
       description,
       assignee,
       category,
       priority,
     });
+
+    setTitle("");
+    setDescription("");
+    setAssignee("");
+    setCategory("");
+    setPriority("");
   };
 
   const inputStyles =
@@ -31,12 +44,14 @@ const NewTaskForm = () => {
       <h2 className="text-xl font-semibold text-gray-800">Skapa ny task</h2>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="title" className={labelStyles} >Titel:</label>
+        <label htmlFor="title" className={labelStyles}>
+          Titel:
+        </label>
         <input
           type="text"
           id="title"
           required
-          placeholder="Enter task title"
+          placeholder="Skriv en titel"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className={inputStyles}
@@ -44,11 +59,13 @@ const NewTaskForm = () => {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="description" className={labelStyles}>Beskrivning:</label>
+        <label htmlFor="description" className={labelStyles}>
+          Beskrivning:
+        </label>
         <textarea
           id="description"
           required
-          placeholder="Enter task description"
+          placeholder="Beskriv uppgiften..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className={`${inputStyles} resize-none h-24`}
@@ -56,12 +73,14 @@ const NewTaskForm = () => {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="assignee" className={labelStyles}>Ansvarig:</label>
+        <label htmlFor="assignee" className={labelStyles}>
+          Ansvarig:
+        </label>
         <input
           type="text"
           id="assignee"
           required
-          placeholder="Enter assignee name"
+          placeholder="Ange ansvarig person"
           value={assignee}
           onChange={(e) => setAssignee(e.target.value)}
           className={inputStyles}
@@ -70,7 +89,9 @@ const NewTaskForm = () => {
 
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex flex-col gap-1 flex-1">
-          <label htmlFor="category" className={labelStyles}>Kategori:</label>
+          <label htmlFor="category" className={labelStyles}>
+            Kategori:
+          </label>
           <select
             id="category"
             required
@@ -87,7 +108,9 @@ const NewTaskForm = () => {
         </div>
 
         <div className="flex flex-col gap-1 flex-1">
-          <label htmlFor="priority" className={labelStyles}>Prioritet:</label>
+          <label htmlFor="priority" className={labelStyles}>
+            Prioritet:
+          </label>
           <select
             id="priority"
             required
