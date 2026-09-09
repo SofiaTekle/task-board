@@ -32,16 +32,15 @@ const NewTaskForm = ({ onAddTask }: NewTaskFormProps) => {
     setPriority("");
   };
 
-  const inputStyles =
-    "w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400";
-  const labelStyles = "text-sm font-medium text-gray-700";
+const inputStyles = "w-full border border-stone-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600";
+const labelStyles = "text-sm font-medium text-stone-700";
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col gap-4 max-w-xl"
+      className="bg-white rounded-lg border border-stone-200 p-6 flex flex-col gap-4 max-w-xl"
     >
-      <h2 className="text-xl font-semibold text-gray-800">Skapa ny task</h2>
+      <h2 className="text-xl font-semibold text-stone-900">Skapa ny task</h2>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="title" className={labelStyles}>
@@ -127,7 +126,7 @@ const NewTaskForm = ({ onAddTask }: NewTaskFormProps) => {
       </div>
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md px-4 py-2 transition-colors cursor-pointer self-start"
+        className="bg-stone-900 hover:bg-stone-700 text-white font-medium rounded-md px-4 py-2 transition-colors cursor-pointer self-start"
       >
         Skapa uppgift
       </button>

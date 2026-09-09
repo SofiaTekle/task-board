@@ -1,2 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Manrope", sans-serif;
+}
+
+body {
+  background-color:  #fafafa; 
+}
