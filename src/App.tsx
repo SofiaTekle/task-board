@@ -4,105 +4,51 @@ import TaskCard from "./components/TaskCard";
 import Column from "./components/Column";
 import type { Task, NewTask } from "./types/Task";
 import NewTaskForm from "./components/NewTaskForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const initialTasks: Task[] = [
-  {
-    id: 1,
-    title: "Skapa dashboard",
-    description: "Gör en dashboard för att visa data",
-    assignee: "Anna",
-    category: "Frontend",
-    priority: "Hög",
-    status: "todo",
-  },
-  {
-    id: 2,
-    title: "Skriva dokumentation",
-    description: "Skriv dokumentation för projektet",
-    assignee: "Sofia",
-    category: "Design",
-    priority: "Låg",
-    status: "doing",
-  },
-  {
-    id: 3,
-    title: "Skriva tester",
-    description: "Skriv tester för projektet",
-    assignee: "Erik",
-    category: "Testing",
-    priority: "Medium",
-    status: "done",
-  },
-  {
-    id: 4,
-    title: "Implementera autentisering",
-    description: "Implementera autentisering med JWT",
-    assignee: "Lina",
-    category: "API",
-    priority: "Hög",
-    status: "todo",
-  },
-  {
-    id: 5,
-    title: "Skapa API-dokumentation",
-    description: "Skapa dokumentation för API:et",
-    assignee: "David",
-    category: "API",
-    priority: "Medium",
-    status: "doing",
-  },
-  {
-    id: 6,
-    title: "Designa användargränssnitt",
-    description: "Designa användargränssnittet för applikationen",
-    assignee: "Emma",
-    category: "Design",
-    priority: "Låg",
-    status: "done",
-  },
-  {
-    id: 7,
-    title: "Optimera prestanda",
-    description: "Optimera prestanda för applikationen",
-    assignee: "Oscar",
-    category: "Frontend",
-    priority: "Hög",
-    status: "todo",
-  },
-  {
-    id: 8,
-    title: "Skriva enhetstester",
-    description: "Skriv enhetstester för applikationen",
-    assignee: "Maja",
-    category: "Testing",
-    priority: "Medium",
-    status: "doing",
-  },
-  {
-    id: 9,
-    title: "Implementera push-notiser",
-    description: "Implementera push-notiser för applikationen",
-    assignee: "Felix",
-    category: "Frontend",
-    priority: "Låg",
-    status: "done",
-  },
-];
+const apiUrl = "http://localhost:3001/api/tasks";
 
 const App = () => {
-  const [taskId, setTaskId] = useState<number>(initialTasks.length + 1);
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const addTask = (newTask: NewTask) => {
-    const taskToAdd: Task = {
-      id: taskId,
-      status: "todo",
-      ...newTask,
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error("Kunde inte hämta tasks");
+      }
+      const result: Task[] = await response.json();
+      setTasks(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const executeFetch = async () => {
+      await fetchTasks();
     };
-    setTaskId(taskId + 1);
-    setTasks([...tasks, taskToAdd]);
+    executeFetch();
+  }, []);
+
+  const addTask = async (newTask: NewTask) => {
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      if (!response.ok) {
+        throw new Error("Kunde inte skapa task");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    await fetchTasks();
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -191,4 +137,5 @@ const App = () => {
     </>
   );
 };
+
 export default App;
