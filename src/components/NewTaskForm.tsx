@@ -40,7 +40,6 @@ const labelStyles = "text-sm font-medium text-stone-700";
       onSubmit={handleSubmit}
       className="bg-white rounded-lg border border-stone-200 p-6 flex flex-col gap-4 max-w-xl"
     >
-      <h2 className="text-xl font-semibold text-stone-900">Skapa ny task</h2>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="title" className={labelStyles}>
@@ -128,7 +127,7 @@ const labelStyles = "text-sm font-medium text-stone-700";
         type="submit"
         className="bg-stone-900 hover:bg-stone-700 text-white font-medium rounded-md px-4 py-2 transition-colors cursor-pointer self-start"
       >
-        Skapa uppgift
+        Skapa task
       </button>
     </form>
   );
